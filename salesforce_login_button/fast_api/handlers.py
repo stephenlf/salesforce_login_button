@@ -113,8 +113,7 @@ def _write_to_window(content: str) -> HTMLResponse:
     }
     for key in replace_map:
         content = content.replace(key, replace_map[key])
-    return HTMLResponse(f"""
-<!DOCTYPE html>
+    return HTMLResponse(f"""<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -129,5 +128,4 @@ def _write_to_window(content: str) -> HTMLResponse:
     window.close();
   </script>
 </body>
-</html>
-    """)
+</html>""")
