@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    // Set up a listener to receive messages
+    window.addEventListener('message', (event) => {
+      if (event.origin !== window.location.origin) {
+        // Only accept messages from the same origin (for security)
+        console.error('Origin not allowed:', event.origin);
+        return;
+      }
+      console.log('Received message from popup:', event.data);
+    });
+
+    // Open the popup
+    const popup = window.open('', '_blank', 'width=400,height=400');
+
+    if (popup) {
+      popup.document.write(`
+        <button onclick="sendMessage()">Send Message</button>
+        <script>
+          function sendMessage() {
+            window.opener.postMessage('hi from popup', window.location.origin);
+          }
+        </script>
+      `);
+    }
+  </script>
+</body>
+</html>
