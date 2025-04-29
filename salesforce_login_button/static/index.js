@@ -1,4 +1,5 @@
 /** @param {{ model: DOMWidgetModel, el: HTMLElement }} context */
+
 function render({ model, el }) {
   const buttonText = model.get('button_text') ?? 'Log in to Salesforce';
   const loginUrl = model.get('login_url');
