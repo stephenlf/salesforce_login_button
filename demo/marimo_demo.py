@@ -5,11 +5,10 @@ from pathlib import Path
 from fastapi import FastAPI, Request, HTTPException
 from starlette.middleware.sessions import SessionMiddleware
 from salesforce_login_button.handlers.fastapi import OAuthSF
-
 # Create a marimo asgi app
 marimo_server = (
     marimo.create_asgi_app()
-    .with_dynamic_directory(path="", directory=Path(__name__).parent / "notebooks")
+    .with_app(path="", root=Path(os.getcwd()) / "demo/notebooks/demo.py")
 )
 
 # Create a FastAPI app

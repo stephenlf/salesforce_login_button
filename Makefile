@@ -21,4 +21,4 @@ clean:
 	rm -rf dist/ build/ *.egg-info
 
 demo:
-	uv run uvicorn demo.marimo_demo:app --host localhost --port 5000
+	python3 -m demo.marimo_demo
