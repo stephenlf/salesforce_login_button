@@ -9,18 +9,23 @@ function render({ model, el }) {
   el.appendChild(button);
 
   button.onclick = () => {
-    // Open up the login URL in a new 
-    window.open(loginUrl, '_blank', 'width=400,height=400');
+    // Set up an event listenter to receive the auth information from the
+    // popup window
     window.addEventListener('message', (event) => {
       if (event.origin !== window.location.origin) {
         console.error('Origin not allowed: ', event.origin);
         return;
       }
 
-      console.log('Received auth message: ', event.data);
+      const token = event.data;
+      model.set('token', token);
+      model.set('connected', true);
+      model.save_changes();
 
-      model.set('auth_response', event.data);
     }, { once: true });
+
+    // Open the login URL in a new window
+    window.open(loginUrl, '_blank', 'width=400,height=400');
   }
 }
 

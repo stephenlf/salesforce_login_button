@@ -39,7 +39,14 @@ class SalesforceLoginButton(anywidget.AnyWidget):
         assert button.connected
         sf: Salesforce = button.salesforce_client()
         ```
+
+    Attributes:
+        - `domain`: The Salesforce domain to use for login (e.g., 'login' or 'test').
+        - `login_url`: The URL to redirect to for login, defaults to '/login'.
+        - `connected`: A boolean indicating if the user is connected.
+        - `token`: A dictionary containing the OAuth token information.
     """
+    
     def __init__(self, domain: str, login_url: str = '/login', **kwargs):
         """
         Build a new SalesforceLoginButton widget.
@@ -59,8 +66,6 @@ class SalesforceLoginButton(anywidget.AnyWidget):
     # _esm = Path(__file__).parent / 'static/index.js'
     _esm = Path(__file__).parent / 'static' / 'index.js'
     _css = Path(__file__).parent / 'static' / 'index.css'
-
-    # True if connected, otherwise False
 
     def salesforce_client(self):
         """
