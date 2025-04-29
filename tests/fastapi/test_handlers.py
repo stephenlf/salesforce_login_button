@@ -56,3 +56,25 @@ async def test_callback_success(oauth: OAuthSF, httpx_mock):
     assert isinstance(body, str)
     assert "window.opener.postMessage" in body
     
+@pytest.mark.asyncio
+async def test_login_domain_validation(oauth):
+    with pytest.raises(ValueError):
+        await oauth.login(user_id='user123', domain='bad+domain')
+
+@pytest.mark.asyncio
+async def test_callback_missing_code(oauth):
+    request = Request({
+        "type": "http",
+        "query_string": urlencode({"state": "some+state"})
+    })
+    with pytest.raises(ValueError):
+        await oauth.callback(request)
+
+@pytest.mark.asyncio
+async def test_callback_missing_verifier(oauth):
+    request = Request({
+        "type": "http",
+        "query_string": urlencode({"code": "somecode", "state": "badstate"})
+    })
+    with pytest.raises(ValueError):
+        await oauth.callback(request)
