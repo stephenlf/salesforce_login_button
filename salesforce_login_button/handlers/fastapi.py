@@ -12,12 +12,10 @@ class OAuthSF:
         self,
         client_id: str,
         client_secret: str,
-        authorize_url: str,
         redirect_uri: str,
     ):
         self.client_id = client_id
         self.client_secret = client_secret
-        self.authorization_url = authorize_url
         self.redirect_uri = redirect_uri
         self._verifier_store = dict() # In-memory PKCE code_verifier cache
     
@@ -32,18 +30,18 @@ class OAuthSF:
         if '+' in domain:
             raise ValueError('Domain cannot contain the "+" character')
         
-        state = '+'.join(user_id, domain)
+        state = '+'.join([user_id, domain])
         code_verifier, code_challenge = self._generate_pkce_pair()
         self._verifier_store[state] = code_verifier
         
         params = {
             'response_type': 'code',
             'client_id': self.client_id,
-            'redirect_uri': f'https://{domain}.my.salesforce.com/services/oauth2/authorize',
+            'redirect_uri': self.redirect_uri,
             'code_challenge': code_challenge,
             'state': state,
         }
-        url = self.authorization_url + '?' + urllib.parse.urlencode(params)
+        url = f'https://{domain}.my.salesforce.com/services/oauth2/authorize?{urllib.parse.urlencode(params)}'
         return RedirectResponse(url)
     
     async def callback(self, request: Request) -> dict:
@@ -81,7 +79,7 @@ class OAuthSF:
             raise ValueError("Missing code_verifier. Session expired?")
         
         domain = state.split('+')[-1]
-        token_url = f'https://{domain}.my.salesforce.com/services/oauth2/authorize',
+        token_url = f'https://{domain}.my.salesforce.com/services/oauth2/token'
         
         data = {
             'grant_type': 'authorization_code',
