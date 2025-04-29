@@ -55,6 +55,7 @@ async def test_callback_success(oauth: OAuthSF, httpx_mock):
     body = html_response.body.decode()
     assert isinstance(body, str)
     assert "window.opener.postMessage" in body
+    assert httpx_mock.get_requests()[0].url.path == "/services/oauth2/token"
     
 @pytest.mark.asyncio
 async def test_login_domain_validation(oauth):
