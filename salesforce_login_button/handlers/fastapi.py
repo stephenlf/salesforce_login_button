@@ -39,7 +39,7 @@ class OAuthSF:
             'client_id': self.client_id,
             'redirect_uri': self.redirect_uri,
             'code_challenge': code_challenge,
-            'state': state,
+            'state': urllib.parse.quote_plus(state),
         }
         url = f'https://{domain}.my.salesforce.com/services/oauth2/authorize?{urllib.parse.urlencode(params)}'
         return RedirectResponse(url)
