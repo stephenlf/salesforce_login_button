@@ -1,7 +1,13 @@
 import pytest
+import random
+import string
+
 from httpx import AsyncClient, ASGITransport
 from test_app import create_test_app
-from urllib.parse import parse_qs
+from urllib.parse import parse_qs, urlencode
+
+def random_string(length=10):
+    return ''.join(random.choices(string.ascii_letters + string.digits, k=length))
 
 @pytest.fixture
 async def client():
@@ -35,4 +41,25 @@ async def test_callback_flow(client, httpx_mock):
     assert response.status_code == 200
     assert "window.opener.postMessage" in response.text
     
+@pytest.mark.asyncio
+@pytest.mark.parametrize("mutation", range(20))
+async def test_fuzz_callback_flow(client, mutation):
+    """Fuzz '/callback' endpoint with random codes and states."""
     
+    random.seed = mutation
+    
+    query_params = {}
+    # Include bogus `code` or omit entirely
+    if random.choice([True, False]):
+        query_params["code"] = random_string(20)
+    # Include bogus `state` or omit entirely
+    if random.choice([True, False]):
+        query_params["state"] = random_string(20)
+    # Typo in param names
+    if random.choice([True, False]):
+        query_params["codex"] = random_string(20)
+        
+    query = urlencode(query_params)
+    response = await client.get(f"/callback?{query}")
+    
+    assert response.status_code in (200, 400, 401)

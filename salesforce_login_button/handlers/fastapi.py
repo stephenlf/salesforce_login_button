@@ -7,7 +7,7 @@ import json
 
 from typing import TypedDict
 
-from fastapi import Request, Response
+from fastapi import Request, Response, HTTPException
 from fastapi.responses import RedirectResponse, HTMLResponse
 
 class OAuthSF:
@@ -31,7 +31,7 @@ class OAuthSF:
     
     async def login(self, user_id: str, domain: str) -> Response:
         if '+' in domain:
-            raise ValueError('Domain cannot contain the "+" character')
+            raise HTTPException(400, 'Domain cannot contain the "+" character')
         
         state = _encode_state({
             'user_id': user_id,
@@ -78,11 +78,11 @@ class OAuthSF:
         state = request.query_params.get("state")
         
         if not code or not state:
-            raise ValueError("Missing code or state in callback")
+            raise HTTPException(400, "Missing code or state in callback")
         
         code_verifier = self._verifier_store.pop(state, None)
         if not code_verifier:
-            raise ValueError("Missing code_verifier. Session expired?")
+            raise HTTPException(401, "Missing code_verifier. Session expired?")
         
         decoded_state = _decode_state(state)
         token_url = f'https://{decoded_state['domain']}.my.salesforce.com/services/oauth2/token'

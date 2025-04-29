@@ -1,6 +1,6 @@
 import pytest
 from unittest.mock import patch, AsyncMock
-from fastapi import Request
+from fastapi import Request, HTTPException
 from urllib.parse import parse_qs, urlparse, urlencode
 
 from salesforce_login_button.handlers.fastapi import OAuthSF, _encode_state, _decode_state
@@ -63,7 +63,7 @@ async def test_callback_success(oauth: OAuthSF, httpx_mock):
     
 @pytest.mark.asyncio
 async def test_login_domain_validation(oauth):
-    with pytest.raises(ValueError):
+    with pytest.raises(HTTPException):
         await oauth.login(user_id='user123', domain='bad+domain')
 
 @pytest.mark.asyncio
@@ -72,7 +72,7 @@ async def test_callback_missing_code(oauth):
         "type": "http",
         "query_string": urlencode({"state": "some+state"})
     })
-    with pytest.raises(ValueError):
+    with pytest.raises(HTTPException):
         await oauth.callback(request)
 
 @pytest.mark.asyncio
@@ -81,5 +81,5 @@ async def test_callback_missing_verifier(oauth):
         "type": "http",
         "query_string": urlencode({"code": "somecode", "state": "badstate"})
     })
-    with pytest.raises(ValueError):
+    with pytest.raises(HTTPException):
         await oauth.callback(request)
