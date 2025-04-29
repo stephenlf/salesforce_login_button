@@ -10,10 +10,10 @@ format:
 
 # Run tests with pytest
 test:
-	uv run pytest --cov=salesforce_login_button --cov-report=term tests/
+	uv run pytest --cov=salesforce_login_button --cov-report=term
 
 test.local:
-	uv run pytest --cov=salesforce_login_button --cov-report=html tests/
+	uv run pytest --cov=salesforce_login_button --cov-report=html
 	python3 -c 'import webbrowser; from pathlib import Path; webbrowser.open(str(Path().parent.resolve() / "htmlcov" / "index.html"))'
 
 # Clean build artifacts

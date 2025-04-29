@@ -23,6 +23,8 @@ async def test_login_generates_redirect(oauth: OAuthSF):
     assert f"{domain}.my.salesforce.com" in location.netloc
     assert "code_challenge" in qs
     assert domain in qs['state'][0]
+    assert 'user123+test' in oauth._verifier_store
+    assert oauth._verifier_store['user123+test'] is not None
 
 @pytest.mark.asyncio
 async def test_callback_success(oauth: OAuthSF, httpx_mock):
