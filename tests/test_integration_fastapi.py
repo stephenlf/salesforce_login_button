@@ -27,8 +27,6 @@ async def test_callback_flow(client, httpx_mock):
     # First, log in to get the verifier stored
     res = await client.get("/login")
     state = parse_qs(res.headers['location'])['state'][0]
-    print(f"State after login: {state}")
-    print(f"Verifier store after login: {client._transport.app.state.oauth._verifier_store}")
 
         
     # Then simulate a callback

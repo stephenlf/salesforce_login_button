@@ -3,6 +3,9 @@ import base64
 import hashlib
 import urllib
 import httpx
+import json
+
+from typing import TypedDict
 
 from fastapi import Request, Response
 from fastapi.responses import RedirectResponse, HTMLResponse
@@ -30,7 +33,10 @@ class OAuthSF:
         if '+' in domain:
             raise ValueError('Domain cannot contain the "+" character')
         
-        state = '+'.join([user_id, domain])
+        state = _encode_state({
+            'user_id': user_id,
+            'domain': domain
+        })
         code_verifier, code_challenge = self._generate_pkce_pair()
         self._verifier_store[state] = code_verifier
         
@@ -39,7 +45,7 @@ class OAuthSF:
             'client_id': self.client_id,
             'redirect_uri': self.redirect_uri,
             'code_challenge': code_challenge,
-            'state': urllib.parse.quote_plus(state), # If not quoted, then `request.query_params.get("state")` will turn '+' into ' '
+            'state': state, # If not quoted, then `request.query_params.get("state")` will turn '+' into ' '
         }
         url = f'https://{domain}.my.salesforce.com/services/oauth2/authorize?{urllib.parse.urlencode(params)}'
         return RedirectResponse(url)
@@ -78,8 +84,8 @@ class OAuthSF:
         if not code_verifier:
             raise ValueError("Missing code_verifier. Session expired?")
         
-        domain = state.split('+')[-1]
-        token_url = f'https://{domain}.my.salesforce.com/services/oauth2/token'
+        decoded_state = _decode_state(state)
+        token_url = f'https://{decoded_state['domain']}.my.salesforce.com/services/oauth2/token'
         
         data = {
             'grant_type': 'authorization_code',
@@ -96,7 +102,16 @@ class OAuthSF:
             resp.raise_for_status()
 
         return _write_to_window(resp.read().decode('utf-8'))
-    
+
+class _OAuthState(TypedDict):
+    user_id: str
+    domain: str
+
+def _encode_state(state: _OAuthState) -> str:
+    return base64.urlsafe_b64encode(json.dumps(state).encode()).decode()
+
+def _decode_state(encoded_state: str) -> _OAuthState:
+    return json.loads(base64.urlsafe_b64decode(encoded_state.encode()).decode())
     
 def _write_to_window(content: str) -> HTMLResponse:
     """

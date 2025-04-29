@@ -3,7 +3,7 @@ from unittest.mock import patch, AsyncMock
 from fastapi import Request
 from urllib.parse import parse_qs, urlparse, urlencode
 
-from salesforce_login_button.handlers.fastapi import OAuthSF
+from salesforce_login_button.handlers.fastapi import OAuthSF, _encode_state, _decode_state
 
 @pytest.fixture
 def oauth():
@@ -22,16 +22,18 @@ async def test_login_generates_redirect(oauth: OAuthSF):
     assert response.status_code == 307 # Redirect
     assert f"{domain}.my.salesforce.com" in location.netloc
     assert "code_challenge" in qs
-    assert domain in qs['state'][0]
-    assert 'user123+test' in oauth._verifier_store
-    assert oauth._verifier_store['user123+test'] is not None
+    assert domain == _decode_state(qs['state'][0])['domain']
+    assert qs['state'][0] in oauth._verifier_store.keys()
 
 @pytest.mark.asyncio
 async def test_callback_success(oauth: OAuthSF, httpx_mock):
     # Setup a fake code_verifier in store
     user_id = 'user123'
     domain = 'example'
-    state = f'{user_id}+{domain}'
+    state = _encode_state({
+        'user_id': user_id,
+        'domain': domain
+    })
     oauth._verifier_store[state] = 'test_code_verifier'
     
     # Mock the httpx.AsyncClient().post call
