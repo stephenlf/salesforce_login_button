@@ -95,7 +95,7 @@ class OAuthSF:
             resp = await client.post(token_url, data=data)
             resp.raise_for_status()
 
-        return _write_to_window(resp)
+        return _write_to_window(resp.read().decode('utf-8'))
     
     
 def _write_to_window(content: str) -> HTMLResponse:
