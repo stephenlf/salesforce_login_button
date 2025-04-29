@@ -7,7 +7,7 @@ def create_test_app():
     oauth = OAuthSF(
         client_id='test-client-id',
         client_secret='test-client-secret',
-        redirect_uri='http://testserver/callback',
+        callback_url='http://testserver/callback',
     )
     
     app.state.oauth = oauth

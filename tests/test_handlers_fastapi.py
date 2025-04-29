@@ -10,7 +10,7 @@ def oauth():
     return OAuthSF(
         client_id='test-client-id',
         client_secret='test-client-secret',
-        redirect_uri='http://localhost:8000/callback'
+        callback_url='http://localhost:8000/callback'
     )
 
 @pytest.mark.asyncio

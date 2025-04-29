@@ -19,3 +19,6 @@ test.local:
 # Clean build artifacts
 clean:
 	rm -rf dist/ build/ *.egg-info
+
+demo:
+	uv run uvicorn demo.marimo_demo:app --host localhost --port 5000

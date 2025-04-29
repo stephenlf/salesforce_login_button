@@ -15,11 +15,11 @@ class OAuthSF:
         self,
         client_id: str,
         client_secret: str,
-        redirect_uri: str,
+        callback_url: str,
     ):
         self.client_id = client_id
         self.client_secret = client_secret
-        self.redirect_uri = redirect_uri
+        self.callback_url = callback_url
         self._verifier_store = dict() # In-memory PKCE code_verifier cache
     
     def _generate_pkce_pair(self):
@@ -43,7 +43,7 @@ class OAuthSF:
         params = {
             'response_type': 'code',
             'client_id': self.client_id,
-            'redirect_uri': self.redirect_uri,
+            'redirect_uri': self.callback_url,
             'code_challenge': code_challenge,
             'state': state, # If not quoted, then `request.query_params.get("state")` will turn '+' into ' '
         }
@@ -92,7 +92,7 @@ class OAuthSF:
             'client_id': self.client_id,
             'client_secret': self.client_secret,
             'code': code,
-            'redirect_uri': self.redirect_uri,
+            'redirect_uri': self.callback_url,
             'code_verifier': code_verifier,
             'format': 'json',
         }
