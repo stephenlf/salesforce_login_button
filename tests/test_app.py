@@ -1,5 +1,5 @@
 from fastapi import FastAPI, Request
-from salesforce_login_button.handlers.fastapi import OAuthSF
+from salesforce_login_button.server import OAuthSF
 
 def create_test_app():
     app = FastAPI()

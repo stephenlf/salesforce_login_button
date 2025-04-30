@@ -3,7 +3,7 @@ from unittest.mock import patch, AsyncMock
 from fastapi import Request, HTTPException
 from urllib.parse import parse_qs, urlparse, urlencode
 
-from salesforce_login_button.handlers.fastapi.oauth import OAuthSF, _encode_state, _decode_state
+from salesforce_login_button.server.oauth import OAuthSF, _encode_state, _decode_state
 
 @pytest.fixture
 def oauth():

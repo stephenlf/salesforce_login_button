@@ -16,7 +16,7 @@ Here’s a complete example:
 
 ```python
 from fastapi import FastAPI, Request, HTTPException
-from salesforce_login_button.handlers.fastapi import OAuthSF
+from salesforce_login_button.server import OAuthSF
 from starlette.middleware.sessions import SessionMiddleware
 
 def create_app():

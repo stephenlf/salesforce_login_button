@@ -47,13 +47,12 @@ class SalesforceLoginButton(anywidget.AnyWidget):
         - `token`: A dictionary containing the OAuth token information.
     """
     
-    def __init__(self, domain: str, login_url: str = '/login', **kwargs):
+    def __init__(self, domain: str, login_url: str = 'http://localhost:5000/login', **kwargs):
         """
         Build a new SalesforceLoginButton widget.
         :param domain: The Salesforce domain to use for login. E.g. 'login' or
           'test'.
-        :param login_url: The URL to redirect to for login, defaults to '/login'.
-          This must be set up in the notebook server configuration to handle.
+        :param login_url: The URL to the '/login' endpoint in the OAuth server.
           Read the docs for more information.
         :param kwargs: Additional keyword arguments to pass to the parent class.
         """
