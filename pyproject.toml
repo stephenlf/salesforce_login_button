@@ -5,27 +5,37 @@ description = "Add your description here"
 readme = "README.md"
 license = { text = "MIT" }
 authors = [
-  { name = "Stephen Funk", email = "stephenlfunk@gmail.com" }
+    { name = "Stephen Funk", email = "stephenlfunk@gmail.com" }
 ]
 requires-python = ">=3.10"
 keywords = ["salesforce", "SOQL", "simple-salesforce", "oauth", "notebook", "anywidget", "Jupyter", "marimo"]
 classifiers = [
-  "Programming Language :: Python :: 3",
-  "Programming Language :: Python :: 3.10",
-  "Programming Language :: Python :: 3.11",
-  "Programming Language :: Python :: 3.12",
-  "Programming Language :: Python :: 3.13",
-  "License :: OSI Approved :: MIT License",
-  "Operating System :: OS Independent",
-  "Topic :: Software Development :: Libraries :: Python Modules",
-  "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Intended Audience :: Developers",
 ]
 
-dependencies = [
-    "anywidget[dev]>=0.9.18",
+[project.optional-dependencies]
+widget = [
+    "anywidget>=0.9.18",
+    "simple-salesforce>=1.12.6",
+]
+server = [
     "fastapi>=0.115.12",
     "httpx>=0.28.1",
+    "starlette>=0.46.2",
+]
+full = [
+    "anywidget>=0.9.18",
     "simple-salesforce>=1.12.6",
+    "fastapi>=0.115.12",
+    "httpx>=0.28.1",
     "starlette>=0.46.2",
 ]
 
@@ -40,6 +50,7 @@ dev = [
     "salesforce-login-button",
     "uvicorn>=0.34.2",
     "watchfiles>=1.0.5",
+    "anywidget[dev]>=0.9.18",
 ]
 fastapi = [
     "fastapi>=0.115.12",

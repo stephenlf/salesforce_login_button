@@ -1,7 +1,13 @@
+try:
+    from fastapi import FastAPI, Request, HTTPException
+    from starlette.middleware.sessions import SessionMiddleware
+except ImportError as e:
+    raise ImportError(
+        "To use server component, install with `pip install salesforce_login_button[server]`"
+    )
+    
 import os
-from fastapi import FastAPI, Request, HTTPException
 from salesforce_login_button.server import OAuthSF
-from starlette.middleware.sessions import SessionMiddleware
 
 def create_callback_server(
     client_id: str = os.environ.get('SF_OAUTH_CLIENT_ID'),
