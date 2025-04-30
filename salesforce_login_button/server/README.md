@@ -28,7 +28,7 @@ def create_app():
     oauth = OAuthSF(
         client_id='your-salesforce-client-id',
         client_secret='your-salesforce-client-secret',
-        redirect_uri='https://yourapp.com/callback',  # Must match your Salesforce Connected App settings
+        callback_url='https://yourapp.com/callback',  # Must match your Salesforce Connected App settings
     )
 
     # Store the instance on app.state for shared access

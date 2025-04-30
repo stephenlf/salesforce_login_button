@@ -1,5 +1,6 @@
 from fastapi import FastAPI, Request
-from salesforce_login_button.server import OAuthSF
+from salesforce_login_button.server import OAuthSF, create_callback_server
+import pytest
 
 def create_test_app():
     app = FastAPI()
@@ -21,3 +22,7 @@ def create_test_app():
         return await app.state.oauth.callback(request)
     
     return app
+
+def test_build_real_app():
+    app = create_callback_server('test_client', 'test_secret')
+    assert 'FastAPI' in str(type(app))
