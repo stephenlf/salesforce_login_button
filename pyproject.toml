@@ -51,6 +51,7 @@ dev = [
     "uvicorn>=0.34.2",
     "watchfiles>=1.0.5",
     "anywidget[dev]>=0.9.18",
+    "dotenv>=0.9.9",
 ]
 fastapi = [
     "fastapi>=0.115.12",
