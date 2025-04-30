@@ -10,5 +10,9 @@ dev.ipynb
 .coverage
 htmlcov
 
-# Virtual environments
+# Environments
 .venv
+.env
+
+# E2E tests
+e2e/

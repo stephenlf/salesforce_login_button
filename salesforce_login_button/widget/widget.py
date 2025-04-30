@@ -1,4 +1,5 @@
 import anywidget
+import os
 
 from typing import TypedDict
 from pathlib import Path
@@ -47,7 +48,7 @@ class SalesforceLoginButton(anywidget.AnyWidget):
         - `token`: A dictionary containing the OAuth token information.
     """
     
-    def __init__(self, domain: str, login_url: str = 'http://localhost:5000/login', **kwargs):
+    def __init__(self, domain: str, login_url: str = os.environ.get('SF_CALLBACK_LOGIN_URL'), **kwargs):
         """
         Build a new SalesforceLoginButton widget.
         :param domain: The Salesforce domain to use for login. E.g. 'login' or
@@ -57,6 +58,8 @@ class SalesforceLoginButton(anywidget.AnyWidget):
         :param kwargs: Additional keyword arguments to pass to the parent class.
         """
         super().__init__(**kwargs)
+        if not login_url:
+            raise ValueError('login_url cannot be empty')
         self.domain = traitlets.Unicode(domain).tag(sync=True)
         self.login_url = traitlets.Unicode(login_url).tag(sync=True)
         self.connected = traitlets.Bool(False).tag(sync=True)

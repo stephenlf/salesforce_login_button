@@ -1411,16 +1411,28 @@ wheels = [
 name = "salesforce-login-button"
 version = "0.1.0"
 source = { virtual = "." }
-dependencies = [
-    { name = "anywidget", extra = ["dev"] },
+
+[package.optional-dependencies]
+full = [
+    { name = "anywidget" },
     { name = "fastapi" },
     { name = "httpx" },
     { name = "simple-salesforce" },
     { name = "starlette" },
 ]
+server = [
+    { name = "fastapi" },
+    { name = "httpx" },
+    { name = "starlette" },
+]
+widget = [
+    { name = "anywidget" },
+    { name = "simple-salesforce" },
+]
 
 [package.dev-dependencies]
 dev = [
+    { name = "anywidget", extra = ["dev"] },
     { name = "ipykernel" },
     { name = "marimo" },
     { name = "pytest" },
@@ -1437,15 +1449,22 @@ fastapi = [
 
 [package.metadata]
 requires-dist = [
-    { name = "anywidget", extras = ["dev"], specifier = ">=0.9.18" },
-    { name = "fastapi", specifier = ">=0.115.12" },
-    { name = "httpx", specifier = ">=0.28.1" },
-    { name = "simple-salesforce", specifier = ">=1.12.6" },
-    { name = "starlette", specifier = ">=0.46.2" },
+    { name = "anywidget", marker = "extra == 'full'", specifier = ">=0.9.18" },
+    { name = "anywidget", marker = "extra == 'widget'", specifier = ">=0.9.18" },
+    { name = "fastapi", marker = "extra == 'full'", specifier = ">=0.115.12" },
+    { name = "fastapi", marker = "extra == 'server'", specifier = ">=0.115.12" },
+    { name = "httpx", marker = "extra == 'full'", specifier = ">=0.28.1" },
+    { name = "httpx", marker = "extra == 'server'", specifier = ">=0.28.1" },
+    { name = "simple-salesforce", marker = "extra == 'full'", specifier = ">=1.12.6" },
+    { name = "simple-salesforce", marker = "extra == 'widget'", specifier = ">=1.12.6" },
+    { name = "starlette", marker = "extra == 'full'", specifier = ">=0.46.2" },
+    { name = "starlette", marker = "extra == 'server'", specifier = ">=0.46.2" },
 ]
+provides-extras = ["widget", "server", "full"]
 
 [package.metadata.requires-dev]
 dev = [
+    { name = "anywidget", extras = ["dev"], specifier = ">=0.9.18" },
     { name = "ipykernel", specifier = ">=6.29.5" },
     { name = "marimo", specifier = ">=0.13.2" },
     { name = "pytest", specifier = ">=8.3.5" },

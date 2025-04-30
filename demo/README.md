@@ -1,1 +1,0 @@
-We spin up a marimo server and 
