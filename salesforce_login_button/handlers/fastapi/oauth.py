@@ -136,9 +136,14 @@ def _write_to_window(content: str) -> HTMLResponse:
 <body>
   <p>You may close this tab</p>
   <script>
-    const token = `{content}`;
-    window.opener.postMessage(token, window.location.origin);
-    window.close();
+    window.onload = function() {{
+        const token = {{
+            type: "SALESFORCE_OAUTH",
+            payload: JSON.parse(`{content}`),
+        }};
+        window.opener.postMessage(token, 'http://localhost:2718');
+        window.close();
+    }}
   </script>
 </body>
 </html>""")

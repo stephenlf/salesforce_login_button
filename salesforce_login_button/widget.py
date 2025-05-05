@@ -47,7 +47,7 @@ class SalesforceLoginButton(anywidget.AnyWidget):
         - `token`: A dictionary containing the OAuth token information.
     """
     
-    def __init__(self, domain: str, login_url: str = '/login', **kwargs):
+    def __init__(self, domain: str, user_id: str, login_url: str = '/login', **kwargs):
         """
         Build a new SalesforceLoginButton widget.
         :param domain: The Salesforce domain to use for login. E.g. 'login' or
@@ -58,14 +58,20 @@ class SalesforceLoginButton(anywidget.AnyWidget):
         :param kwargs: Additional keyword arguments to pass to the parent class.
         """
         super().__init__(**kwargs)
-        self.domain = traitlets.Unicode(domain).tag(sync=True)
-        self.login_url = traitlets.Unicode(login_url).tag(sync=True)
-        self.connected = traitlets.Bool(False).tag(sync=True)
-        self.token: OAuthToken = traitlets.Dict().tag(sync=True)
+        self.domain = domain
+        self.login_url = login_url
+        self.connected = False
+        self.user_id = user_id
 
     # _esm = Path(__file__).parent / 'static/index.js'
     _esm = Path(__file__).parent / 'static' / 'index.js'
     _css = Path(__file__).parent / 'static' / 'index.css'
+
+    domain = traitlets.Unicode().tag(sync=True)
+    login_url = traitlets.Unicode().tag(sync=True)
+    user_id = traitlets.Unicode().tag(sync=True)
+    connected = traitlets.Bool(False).tag(sync=True)
+    token: OAuthToken = traitlets.Dict().tag(sync=True)
 
     def salesforce_client(self):
         """
