@@ -73,7 +73,7 @@ class SalesforceLoginButton(anywidget.AnyWidget):
     connected = traitlets.Bool(False).tag(sync=True)
     token: OAuthToken = traitlets.Dict().tag(sync=True)
 
-    def salesforce_client(self):
+    def salesforce_client(self, api_version: str = '63.0', **kwargs):
         """
         Returns a `simple_salesforce.Salesforce` client instance
         using the access token and instance URL from the token.
@@ -82,5 +82,7 @@ class SalesforceLoginButton(anywidget.AnyWidget):
             raise ValueError("Not connected to Salesforce. Please log in first.")
         return Salesforce(
             instance_url=self.token['instance_url'],
-            session_id=self.token['access_token']
+            session_id=self.token['access_token'],
+            version=api_version,
+            **kwargs
         )
