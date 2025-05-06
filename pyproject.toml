@@ -15,7 +15,6 @@ classifiers = [
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
-  "License :: OSI Approved :: MIT License",
   "Operating System :: OS Independent",
   "Topic :: Software Development :: Libraries :: Python Modules",
   "Intended Audience :: Developers",
@@ -53,3 +52,6 @@ pythonpath = ["."]
 
 [tool.uv.sources]
 salesforce-login-button = { workspace = true }
+
+[tool.setuptools]
+packages = ["salesforce_login_button"]
